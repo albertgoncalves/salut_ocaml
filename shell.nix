@@ -3,10 +3,10 @@
 with pkgs; mkShell {
     name = "ocaml";
 
-    buildInputs = [ ocaml
-                    ocamlPackages.batteries
-                    ocamlPackages.findlib
-                    ocamlPackages.utop
+    buildInputs = [ ocaml-ng.ocamlPackages_4_07.ocaml
+                    ocaml-ng.ocamlPackages_4_07.batteries
+                    ocaml-ng.ocamlPackages_4_07.findlib
+                    ocaml-ng.ocamlPackages_4_07.utop
                     rlwrap
                   ];
 
