@@ -1,6 +1,6 @@
 # Salut, OCaml!
 
-Greetings to **OCaml** via **Nix**.
+Getting started with **OCaml**.
 
 Needed things
 ---
@@ -42,13 +42,13 @@ utop # #use "topfind";;
 utop # #require "batteries";;
 utop # open Batteries;;
 utop # let main () =
-    (1--999)
+    (1--998)
     |> Enum.filter (fun i -> i mod 3 = 0 || i mod 5 = 0)
     |> Enum.reduce (+)
     |> Int.print stdout
     |> print_newline
 
 let () = main ();;
-233168
+232169
 val main : unit -> unit = <fun>
 ```
