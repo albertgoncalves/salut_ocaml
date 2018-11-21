@@ -8,6 +8,7 @@ with pkgs; mkShell {
                     ocaml-ng.ocamlPackages_4_07.findlib
                     ocaml-ng.ocamlPackages_4_07.utop
                     rlwrap
+                    tmux
                   ];
 
     shellHook = ''
