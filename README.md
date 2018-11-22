@@ -16,13 +16,13 @@ To compile and execute via native code:
 ```bash
 $ ocamlopt -o fib fib.ml
 $ ./fib 10
-89
+55
 ```
 
 Or, without creating an executable:
 ```bash
 $ ocaml fib.ml 20
-10946
+6765
 ```
 
 ---
