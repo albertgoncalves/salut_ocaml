@@ -26,7 +26,7 @@ $ ocaml fib.ml 20
 ```
 
 ---
-Use [Findlib](http://projects.camlcity.org/projects/findlib.html) to link in packages:
+Use [Findlib](http://projects.camlcity.org/projects/findlib.html) to link imported packages:
 ```bash
 $ ocamlfind ocamlopt -package batteries -linkpkg euler.ml -o euler
 $ ./euler
@@ -47,8 +47,17 @@ utop # let main () =
     |> Enum.reduce (+)
     |> Int.print stdout
     |> print_newline
-
 let () = main ();;
 232169
 val main : unit -> unit = <fun>
+```
+
+Finally, if you want to import a `.ml` file into the REPL:
+```utop
+utop # #use "topfind";;
+utop # #require "batteries";;
+utop # #use "euler.ml";;
+val main : unit -> unit = <fun>
+utop # main ();;
+233168- : unit = ()
 ```
