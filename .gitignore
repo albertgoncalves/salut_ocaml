@@ -1,0 +1,8 @@
+*
+!.gitignore
+!fib.ml
+!fib.sh
+!euler.ml
+!euler.sh
+!shell.nix
+!README.md
