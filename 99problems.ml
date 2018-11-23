@@ -96,3 +96,35 @@ let is_prime m =
                 if m mod n <> 0 then loop m (n - 1)
                 else false
         in loop m (m - 1);;
+
+let rec gcd a b =
+    if b = 0 then a
+    else gcd b (a mod b);;
+
+let coprime a b =
+    gcd a b = 1;;
+
+let phi m =
+    if m = 1 then 1
+    else if m < 1 then 0
+    else
+        let rec loop m n = function
+        | 1 -> n
+        | r ->
+            if coprime m r then loop m (n + 1) (r - 1)
+            else loop m n (r - 1)
+        in loop m 1 (m - 1);;
+
+let factors m =
+    let rec loop m f fs =
+        if m = 1 then fs
+        else
+            if m mod f = 0 then (loop [@tailcall]) (m / f) f (f :: fs)
+            else (loop [@tailcall]) m (f + 1) fs
+    in loop m 2 [];;
+
+let pow n p =
+    let rec loop n p acc =
+        if p < 1 then acc
+        else loop n (p - 1) (acc * n)
+    in loop n p 1;;
