@@ -25,7 +25,7 @@ let rec at n l =
         | 1, (x :: _) -> Some x
         | n, (_ :: xs) -> (at [@tailcall]) (n - 1) xs;;
 
-let rec rev l =
+let rev l =
     let rec loop l rev_l =
         match (l, rev_l) with
         | [], rev -> rev
@@ -57,7 +57,7 @@ let rec compress l =
         if x = xx then compress (xx :: xs)
         else x :: compress (xx :: xs);;
 
-let rec pack l : 'a list list =
+let pack l =
     let rec loop l inner outer =
         match (l, inner, outer) with
         | [], i, o -> o @ [i]
@@ -67,3 +67,32 @@ let rec pack l : 'a list list =
                 if x = i then (loop [@tailcall]) xs (x :: ia) o
                 else (loop [@tailcall]) xs [x] (o @ [ia])
     in loop l [] [];;
+
+let drop l nth =
+    let rec loop l n nth =
+        if nth < 1 then l
+        else
+            match (l, n, nth) with
+            | [], _, _ -> []
+            | (x :: xs), n, nth ->
+                if n mod nth = 0 then loop xs (n + 1) nth
+                else x :: loop xs (n + 1) nth
+    in loop l 1 nth;;
+
+let range a b =
+    let d = if a > b then (-1) else 1 in
+    let rec loop a b x =
+        let aa = (a @ [x]) in
+            if x = b then aa
+            else loop aa b (x + d)
+    in loop [a] b (a + d);;
+
+let is_prime m =
+    if m < 2 then false
+    else
+        let rec loop m = function
+            | 1 -> true
+            | n ->
+                if m mod n <> 0 then loop m (n - 1)
+                else false
+        in loop m (m - 1);;
