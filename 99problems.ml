@@ -45,3 +45,25 @@ let rec flatten ll =
     | [] -> []
     | One x :: xs -> x :: (flatten [@tailcall]) xs
     | Many xs :: xa -> flatten xs @ flatten xa;;
+
+let dupe_lst =
+    ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "f"];;
+
+let rec compress l =
+    match l with
+    | [] -> []
+    | x :: [] -> [x]
+    | x :: (xx :: xs) ->
+        if x = xx then compress (xx :: xs)
+        else x :: compress (xx :: xs);;
+
+let rec pack l : 'a list list =
+    let rec loop l inner outer =
+        match (l, inner, outer) with
+        | [], i, o -> o @ [i]
+        | (x :: xs), [], o -> loop xs [x] o
+        | (x :: xs), (i :: is), o ->
+            let ia = (i :: is) in
+                if x = i then (loop [@tailcall]) xs (x :: ia) o
+                else (loop [@tailcall]) xs [x] (o @ [ia])
+    in loop l [] [];;
