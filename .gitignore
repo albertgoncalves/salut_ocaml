@@ -12,3 +12,7 @@
 !triangle.ml
 !stroke.ml
 !line.ml
+!server_example.ml
+!cohttp-server-lwt.sh
+!client_example.ml
+!client_example.sh
