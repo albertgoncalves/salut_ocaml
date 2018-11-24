@@ -4,8 +4,8 @@ let lst = [1; 2; 3; 4];;
 
 let fac n =
     let rec loop acc = function
-        | 0 -> acc
-        | n -> (loop [@tailcall]) (acc * n) (n - 1)
+    | 0 -> acc
+    | n -> (loop [@tailcall]) (acc * n) (n - 1)
     in loop 1 n;;
 
 let rec last l =
@@ -44,9 +44,9 @@ let nest_lst =
 
 let flatten l =
     let rec loop acc = function
-        | [] -> acc
-        | One x :: xs -> (loop [@tailcall]) (x :: acc) xs
-        | Many xs :: xa -> (loop [@tailcall]) (loop acc xs) xa
+    | [] -> acc
+    | One x :: xs -> (loop [@tailcall]) (x :: acc) xs
+    | Many xs :: xa -> (loop [@tailcall]) (loop acc xs) xa
     in loop [] l;;
 
 let dupe_lst =
@@ -67,8 +67,8 @@ let pack l =
         | (x :: xs), [], o -> loop xs [x] o
         | (x :: xs), (i :: is), o ->
             let ia = (i :: is) in
-                if x = i then (loop [@tailcall]) xs (x :: ia) o
-                else (loop [@tailcall]) xs [x] (o @ [ia])
+            if x = i then (loop [@tailcall]) xs (x :: ia) o
+            else (loop [@tailcall]) xs [x] (o @ [ia])
     in loop l [] [];;
 
 let drop l nth =
@@ -86,18 +86,18 @@ let range a b =
     let d = if a > b then (-1) else 1 in
     let rec loop a b x =
         let aa = (a @ [x]) in
-            if x = b then aa
-            else loop aa b (x + d)
+        if x = b then aa
+        else loop aa b (x + d)
     in loop [a] b (a + d);;
 
 let is_prime m =
     if m < 2 then false
     else
         let rec loop m = function
-            | 1 -> true
-            | n ->
-                if m mod n <> 0 then loop m (n - 1)
-                else false
+        | 1 -> true
+        | n ->
+            if m mod n <> 0 then loop m (n - 1)
+            else false
         in loop m (m - 1);;
 
 let rec gcd a b =
@@ -122,8 +122,8 @@ let factors m =
     let rec loop m f fs =
         if m = 1 then fs
         else
-            if m mod f = 0 then (loop [@tailcall]) (m / f) f (f :: fs)
-            else (loop [@tailcall]) m (f + 1) fs
+        if m mod f = 0 then (loop [@tailcall]) (m / f) f (f :: fs)
+        else (loop [@tailcall]) m (f + 1) fs
     in loop m 2 [];;
 
 let pow n p =

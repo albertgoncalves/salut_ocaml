@@ -61,3 +61,9 @@ val main : unit -> unit = <fun>
 utop # main ();;
 233168- : unit = ()
 ```
+
+---
+To clean things up a little bit:
+```bash
+$ ocp-indent -i 99problems.ml
+```
