@@ -11,7 +11,6 @@ with pkgs; mkShell {
                     ocaml-ng.ocamlPackages_4_07.utop
                     rlwrap
                     tmux
-                    xquartz
                   ];
 
     shellHook = ''
