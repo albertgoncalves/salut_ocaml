@@ -52,7 +52,7 @@ let () = main ();;
 val main : unit -> unit = <fun>
 ```
 
-Finally, if you want to import a `.ml` file into the REPL:
+If you want to import a `.ml` file into the REPL:
 ```utop
 utop # #use "topfind";;
 utop # #require "batteries";;
@@ -69,9 +69,16 @@ $ ocp-indent -i 99problems.ml
 ```
 
 ---
-Also, there are [Cairo](https://www.cairographics.org/cairo-ocaml/) bindings:
+Turns out there are [Cairo](https://www.cairographics.org/cairo-ocaml/) bindings:
 ```bash
 $ ocamlfind ocamlopt -package cairo2 -linkpkg stroke.ml -o stroke
 $ ./stroke
 $ open stroke.png
+```
+
+---
+If you have [X11](https://en.wikipedia.org/wiki/X_Window_System), you can play around with the core [Graphics](https://caml.inria.fr/pub/docs/manual-ocaml/libref/Graphics.html) library:
+```bash
+$ ocamlfind ocamlopt -package graphics -linkpkg line.ml -o line
+$ ./line
 ```
