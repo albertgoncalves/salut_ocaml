@@ -82,3 +82,20 @@ If you have [X11](https://en.wikipedia.org/wiki/X_Window_System), you can play a
 $ ocamlfind ocamlopt -package graphics -linkpkg line.ml -o line
 $ ./line
 ```
+
+---
+To serve up local files in the vein of **Python**'s `SimpleHTTPServer`:
+```bash
+$ cohttp-server-lwt
+```
+
+A few examples snagged from [ocaml-cohttp](https://github.com/mirage/ocaml-cohttp) can be used to test out basic HTTP client and server functionality:
+```bash
+$ ocamlfind ocamlopt -package cohttp-lwt-unix -linkpkg client_example.ml -o client_example
+$ ./client_example
+```
+
+```bash
+$ ocamlfind ocamlopt -package cohttp-lwt-unix -linkpkg server_example.ml -o server_example
+$ ./server_example
+```
