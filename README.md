@@ -67,3 +67,11 @@ To clean things up a little bit:
 ```bash
 $ ocp-indent -i 99problems.ml
 ```
+
+---
+Also, there are [Cairo](https://www.cairographics.org/cairo-ocaml/) bindings:
+```bash
+$ ocamlfind ocamlopt -package cairo2 -linkpkg stroke.ml -o stroke
+$ ./stroke
+$ open stroke.png
+```
