@@ -1,6 +1,7 @@
 let main =
     (* Setup Cairo *)
-    let surface = Cairo.Image.create Cairo.Image.ARGB32 ~width:500 ~height:500 in
+    let surface =
+        Cairo.Image.create Cairo.Image.ARGB32 ~width:400 ~height:400 in
     let ctx = Cairo.create surface in
 
     (* Set thickness of brush *)
