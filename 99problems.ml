@@ -1,9 +1,12 @@
 (* https://ocaml.org/learn/tutorials/99problems.html *)
 
-let rec fac = function
-    | 0 -> 1
-    | n -> n * (fac [@tailcall]) (n - 1);;
-let lst = [1;2;3;4];;
+let lst = [1; 2; 3; 4];;
+
+let fac n =
+    let rec loop acc = function
+        | 0 -> acc
+        | n -> (loop [@tailcall]) (acc * n) (n - 1)
+    in loop 1 n;;
 
 let rec last l =
     match l with
@@ -32,7 +35,6 @@ let rev l =
         | (x :: xs), rev -> (loop [@tailcall]) xs (x :: rev)
     in loop l [];;
 
-
 type 'a node =
     | One of 'a
     | Many of 'a node list;;
@@ -40,11 +42,12 @@ type 'a node =
 let nest_lst =
     [ One "a" ; Many [ One "b" ; Many [ One "c" ; One "d" ] ; One "e" ] ];;
 
-let rec flatten ll =
-    match ll with
-    | [] -> []
-    | One x :: xs -> x :: (flatten [@tailcall]) xs
-    | Many xs :: xa -> flatten xs @ flatten xa;;
+let flatten l =
+    let rec loop acc = function
+        | [] -> acc
+        | One x :: xs -> (loop [@tailcall]) (x :: acc) xs
+        | Many xs :: xa -> (loop [@tailcall]) (loop acc xs) xa
+    in loop [] l;;
 
 let dupe_lst =
     ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "f"];;
