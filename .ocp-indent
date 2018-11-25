@@ -31,7 +31,7 @@ in = 0
 # Indent after `match/try with` or `function`:
 #    match foo with
 #    ^^| _ -> bar
-with = 0
+with = 4
 
 # Indent for clauses inside a pattern-match (after the arrow):
 #    match foo with
