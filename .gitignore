@@ -13,6 +13,7 @@
 !stroke.ml
 !line.ml
 !server_example.ml
+!server_example.sh
 !cohttp-server-lwt.sh
 !client_example.ml
 !client_example.sh

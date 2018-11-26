@@ -17,5 +17,6 @@ with pkgs; mkShell {
 
     shellHook = ''
         alias rocaml="rlwrap ocaml"
+        echo $PATH > .nix_path
     '';
 }
