@@ -1,6 +1,6 @@
 (* https://ocaml.org/learn/tutorials/99problems.html *)
 
-let lst = [1; 2; 3; 4]
+let l = [1; 2; 3; 4]
 
 let fac n =
     let rec loop acc = function
@@ -39,17 +39,22 @@ type 'a node =
     | One of 'a
     | Many of 'a node list
 
-let nest_lst =
+let nest_l =
     [ One "a" ; Many [ One "b" ; Many [ One "c" ; One "d" ] ; One "e" ] ]
 
-let flatten l =
+let rec flatten = function
+    | [] -> []
+    | One x :: xs -> x :: flatten xs
+    | Many x :: xs -> flatten x @ flatten xs
+
+let rev_flatten l =
     let rec loop acc = function
         | [] -> acc
         | One x :: xs -> (loop [@tailcall]) (x :: acc) xs
         | Many xs :: xa -> (loop [@tailcall]) (loop acc xs) xa
     in loop [] l
 
-let dupe_lst =
+let dupe_l =
     ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "f"]
 
 let rec compress l =
@@ -60,15 +65,15 @@ let rec compress l =
             if x = xx then compress (xx :: xs)
             else x :: compress (xx :: xs)
 
-let pack l =
+let rev_pack l =
     let rec loop l inner outer =
         match (l, inner, outer) with
-            | [], i, o -> o @ [i]
+            | [], i, o -> i :: o
             | (x :: xs), [], o -> loop xs [x] o
             | (x :: xs), (i :: is), o ->
                 let ia = (i :: is) in
                 if x = i then (loop [@tailcall]) xs (x :: ia) o
-                else (loop [@tailcall]) xs [x] (o @ [ia])
+                else (loop [@tailcall]) xs [x] (ia :: o)
     in loop l [] []
 
 let drop l nth =
@@ -83,12 +88,12 @@ let drop l nth =
     in loop l 1 nth
 
 let range a b =
-    let d = if a > b then (-1) else 1 in
-    let rec loop a b x =
-        let aa = (a @ [x]) in
-        if x = b then aa
-        else loop aa b (x + d)
-    in loop [a] b (a + d)
+    let d = if a < b then (-1) else 1 in
+    let rec loop b a x =
+        let b = (x :: b) in
+        if x = a then b
+        else loop b a (x + d)
+    in loop [b] a (b + d)
 
 let is_prime m =
     if m < 2 then false
