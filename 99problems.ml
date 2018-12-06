@@ -126,8 +126,7 @@ let phi m =
 let factors m =
     let rec loop m f fs =
         if m = 1 then fs
-        else
-        if m mod f = 0 then (loop [@tailcall]) (m / f) f (f :: fs)
+        else if m mod f = 0 then (loop [@tailcall]) (m / f) f (f :: fs)
         else (loop [@tailcall]) m (f + 1) fs
     in loop m 2 []
 
@@ -136,3 +135,11 @@ let pow n p =
         if p < 1 then acc
         else loop n (p - 1) (acc * n)
     in loop n p 1
+
+let exclude n l =
+    if n < 0 then l else
+        let rec loop n = function
+            | [] -> []
+            | (head::tail) ->
+                if n = 0 then tail else (head::exclude (n - 1) tail)
+        in loop n l
