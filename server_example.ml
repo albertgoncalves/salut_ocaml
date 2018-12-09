@@ -1,21 +1,28 @@
-(* ocamlfind ocamlopt -package cohttp-lwt-unix -linkpkg server_example.ml -o server_example *)
+(* ocamlfind ocamlopt -thread -package cohttp-lwt-unix -linkpkg server_example.ml -o server_example *)
 
 open Cohttp
-open Cohttp_lwt_unix
 open Lwt
+
+module CL = Cohttp_lwt
+module CLU = Cohttp_lwt_unix
+module LM = Lwt_main
+module P = Printf
+
+let body_contents body uri meth headers =
+    P.sprintf
+        "Body: %s\n\nUri: %s\n\nMethod: %s\n\nHeaders: \n%s"
+        body uri meth headers
 
 let server =
     let callback _conn req body =
-        let uri = req |> Request.uri |> Uri.to_string in
-        let meth = req |> Request.meth |> Code.string_of_method in
-        let headers = req |> Request.headers |> Header.to_string in
-        body |> Cohttp_lwt.Body.to_string >|= (fun body -> (
-                Printf.sprintf
-                    "Uri: %s\nMethod: %s\nHeaders\nHeaders: %s\nBody: %s"
-                    uri meth headers body
-            ))
-        >>= (fun body -> Server.respond_string ~status:`OK ~body ())
-    in
-    Server.create ~mode:(`TCP (`Port 8000)) (Server.make ~callback ())
+        let uri = req |> CLU.Request.uri |> Uri.to_string in
+        let meth = req |> CLU.Request.meth |> Code.string_of_method in
+        let headers = req |> CLU.Request.headers |> Header.to_string in
 
-let () = ignore (Lwt_main.run server)
+        body
+        |> CL.Body.to_string
+        >|= (fun body -> body_contents body uri meth headers)
+        >>= (fun body -> CLU.Server.respond_string ~status:`OK ~body ()) in
+    CLU.Server.create ~mode:(`TCP (`Port 8000)) (CLU.Server.make ~callback ())
+
+let () = ignore (LM.run server)
