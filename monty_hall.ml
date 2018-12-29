@@ -27,25 +27,42 @@ let doors () =
     let doors = zip_index @@ A.to_list @@ shuffle @@ A.of_list options in
     L.map (fun (i, b) -> Door (i, b)) doors
 
-let select k default xs =
+let select k xs =
     let rec loop = function
-        | Door (i, x)::xs ->
-            if i = k then x else loop xs
-        | [] -> default in
+        | Door (i, x) as d::xs ->
+            if i = k then Some d else loop xs
+        | [] -> None in
     loop xs
 
-let keep boolean x =
-    let Door (_, b) = x in
-    if b = boolean then true else false
+let exclude k xs =
+    let keep k door =
+        let Door (i, _) = door in
+        if i = k then false else true in
+    L.filter (keep k) xs
 
-let filter_doors boolean xs =
-    L.filter (keep boolean) xs
+let change i xs =
+    let choice i xs = match (select i xs) with
+        | Some Door (i, x) ->
+            if x = true then 0 else 1
+        | None -> 0 in
+    choice i xs
 
-let change xs =
-    let trues = filter_doors true xs in
-    let falses = filter_doors false xs in
-    let eliminate = function
-        | [a; b] ->
-            if R.float 1.0 > 0.5 then [a] else [b]
-        | _ -> [] in
-    L.concat [eliminate falses; trues]
+let sum l =
+    let rec loop accu = function
+        | x::xs -> loop (accu + x) xs
+        | [] -> accu in
+    loop 0 l
+
+let game () =
+    let xs = doors () in
+    let i = R.int 2 in
+    change i xs
+
+let int_div n d =
+    let n = float_of_int n and d = float_of_int d in
+    n /. d
+
+let main () =
+    let x = 10000 in
+    let y = sum @@ L.init x (fun _ -> game ()) in
+    int_div y x

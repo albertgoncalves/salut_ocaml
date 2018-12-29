@@ -8,8 +8,8 @@ let flips n p =
 
 let sum l =
     let rec loop accu = function
-        | [] -> accu
-        | x::xs -> loop (accu + x) xs in
+        | x::xs -> loop (accu + x) xs
+        | [] -> accu in
     loop 0 l
 
 let results n m p =
