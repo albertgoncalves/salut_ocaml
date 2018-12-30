@@ -5,19 +5,14 @@ let main =
     let arg_int = ref 100 in
     let arg_str = ref "." in
 
-    let arg_list = [ ( "-b"
-                     , Arg.Set arg_bool
-                     , "bool (default: false)"
-                     )
-                   ; ( "-i"
-                     , Arg.Int (fun arg -> arg_int := arg)
-                     , "integer (default: 100)"
-                     )
-                   ; ( "-s"
-                     , Arg.String (fun arg -> arg_str := arg)
-                     , "string (default: \".\")"
-                     )
-                   ] in
+    let arg_list =
+        [ ("-b", Arg.Set arg_bool, "bool (default: false)")
+        ; ("-i", Arg.Int (fun arg -> arg_int := arg), "integer (default: 100)")
+        ; ( "-s"
+          , Arg.String (fun arg -> arg_str := arg)
+          , "string (default: \".\")"
+          )
+        ] in
 
     let help = "Options available:" in
 
