@@ -10,9 +10,7 @@ let swap a i j =
     a.(j) <- t
 
 let shuffle a =
-    let rand i =
-        let j = i + 1 in
-        R.int j in
+    let rand i = R.int (i + 1) in
     A.iteri (fun i _ -> swap a i (rand i)) a;
     a
 
@@ -40,18 +38,12 @@ let exclude k xs =
         if i = k then false else true in
     L.filter (keep k) xs
 
-let change i xs =
-    let choice i xs = match (select i xs) with
-        | Some Door (i, x) ->
-            if x = true then 0 else 1
-        | None -> 0 in
-    choice i xs
+let change i xs = match (select i xs) with
+    | Some Door (i, x) ->
+        if x = true then 0 else 1
+    | None -> 0
 
-let sum l =
-    let rec loop accu = function
-        | x::xs -> loop (accu + x) xs
-        | [] -> accu in
-    loop 0 l
+let sum = L.fold_left (+) 0
 
 let game () =
     let xs = doors () in

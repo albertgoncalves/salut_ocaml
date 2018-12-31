@@ -6,11 +6,7 @@ let flips n p =
         if R.float 1.0 <= p then 1 else 0 in
     L.init n (fun _ -> flip p)
 
-let sum l =
-    let rec loop accu = function
-        | x::xs -> loop (accu + x) xs
-        | [] -> accu in
-    loop 0 l
+let sum = L.fold_left (+) 0
 
 let results n m p =
     L.init m (fun _ -> sum @@ flips n p)
