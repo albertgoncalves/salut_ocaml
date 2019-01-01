@@ -2,6 +2,7 @@
 
 set -e
 
-ocamlopt -c likelihood.mli
-ocamlopt -o likelihood likelihood.ml
+ocamlc -c likelihood.mli
+ocamlopt -c likelihood.ml
+ocamlopt -o likelihood likelihood.cmx
 ./likelihood
