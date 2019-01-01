@@ -27,8 +27,7 @@ let doors () =
 
 let select k xs =
     let rec loop = function
-        | Door (i, x) as d::xs ->
-            if i = k then Some d else loop xs
+        | Door (i, x) as d::xs -> if i = k then Some d else loop xs
         | [] -> None in
     loop xs
 
@@ -39,8 +38,7 @@ let exclude k xs =
     L.filter (keep k) xs
 
 let change i xs = match (select i xs) with
-    | Some Door (i, x) ->
-        if x = true then 0 else 1
+    | Some Door (i, x) -> if x = true then 0 else 1
     | None -> 0
 
 let sum = L.fold_left (+) 0
