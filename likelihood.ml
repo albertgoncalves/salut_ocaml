@@ -24,4 +24,6 @@ let int_div n d =
 let main () =
     let x = 100000 in
     let y = equals 6 @@ results 9 x 0.5 in
-    int_div y x
+    print_float @@ int_div y x
+
+let () = main ()

@@ -5,4 +5,5 @@
 !.ocp-indent
 !*.sh
 !*.ml
+!*.mli
 !example.csv
