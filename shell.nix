@@ -1,8 +1,6 @@
 { pkgs ? import <nixpkgs> {} }:
-
 with pkgs; mkShell {
-    name = "ocaml";
-
+    name = "OCaml";
     buildInputs = [ ocaml-ng.ocamlPackages_4_07.ocaml
                     ocaml-ng.ocamlPackages_4_07.cairo2
                     ocaml-ng.ocamlPackages_4_07.batteries
@@ -16,7 +14,6 @@ with pkgs; mkShell {
                     clang
                     python36Packages.csvkit
                   ];
-
     shellHook = ''
         alias rocaml="rlwrap ocaml"
         echo $PATH > .nix_path
