@@ -25,10 +25,12 @@ module FloatUtils = Utils
 
 let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f @@ g x
 
+let flip (f : ('a -> 'b -> 'c)) = fun x y -> f y x
+
 let main () =
     L.iter print_endline [IntUtils.string_num 10; FloatUtils.string_num 10.01];
-    L.iter
-        (print_endline @. IntUtils.string_num)
+    flip L.iter
         [IntUtils.force_int 20; FloatUtils.force_int 20.012]
+        (print_endline @. IntUtils.string_num)
 
 let () = main ()
