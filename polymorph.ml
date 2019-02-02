@@ -1,5 +1,3 @@
-module L = List
-
 module type Semigroup = sig
     type t
     val to_string : t -> string
@@ -7,8 +5,8 @@ module type Semigroup = sig
 end
 
 module Utils (S: Semigroup) = struct
-    let string_num = S.to_string
-    let force_int = S.to_int
+    let string_num x = (S.to_string x) ^ " is a string"
+    let force_int x = 10000 + S.to_int x
 end
 
 module IntUtils = Utils
@@ -23,14 +21,18 @@ module FloatUtils = Utils
             let to_int : (t -> int) = int_of_float end
         )
 
+module L = List
+module I = IntUtils
+module F = FloatUtils
+
 let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f @@ g x
 
 let flip (f : ('a -> 'b -> 'c)) = fun x y -> f y x
 
 let main () =
-    L.iter print_endline [IntUtils.string_num 10; FloatUtils.string_num 10.01];
+    L.iter print_endline [I.string_num 10; F.string_num 10.01];
     flip L.iter
-        [IntUtils.force_int 20; FloatUtils.force_int 20.012]
-        (print_endline @. IntUtils.string_num)
+        [I.force_int 20; F.force_int 20.012]
+        (print_endline @. I.string_num)
 
 let () = main ()
