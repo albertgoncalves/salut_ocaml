@@ -5,8 +5,8 @@ module type Semigroup = sig
 end
 
 module Utils (S : Semigroup) = struct
-    let string_num x = (S.to_string x) ^ " is a string"
-    let force_int x = 10000 + S.to_int x
+    let string_num (x : 'a) : string = (S.to_string x) ^ " is a string"
+    let force_int (x : 'a) : int = 10000 + S.to_int x
 end
 
 module IntUtils = Utils
@@ -27,9 +27,9 @@ module F = FloatUtils
 
 let (@.) (f : ('b -> 'c)) (g : ('a -> 'b)) : ('a -> 'c) = fun x -> f @@ g x
 
-let flip (f : ('a -> 'b -> 'c)) = fun x y -> f y x
+let flip (f : ('a -> 'b -> 'c)) : ('b -> 'a -> 'c) = fun x y -> f y x
 
-let main () =
+let main () : unit =
     L.iter print_endline [I.string_num 10; F.string_num 10.01];
     flip L.iter
         [I.force_int 20; F.force_int 20.012]

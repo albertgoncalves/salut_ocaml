@@ -8,10 +8,10 @@ module type Monoid = sig
 end
 
 module Ops (M : Monoid) = struct
-    let sum_list = function
+    let sum_list : ('a list -> 'a) = function
         | [] -> M.empty
         | (x::xs) -> L.fold_left M.append x xs
-    let to_string = M.to_string
+    let to_string : ('a -> string) = M.to_string
 end
 
 module I = Ops
@@ -35,7 +35,7 @@ module S = Ops
             let to_string = fun s -> s end
         )
 
-let main () =
+let main () : unit =
     L.iter
         print_endline
         [ I.to_string @@ I.sum_list [1; 2; 3; 4]
