@@ -9,13 +9,15 @@ module Utils (S : Semigroup) = struct
     let force_int (x : 'a) : int = 10000 + S.to_int x
 end
 
-module IntUtils = Utils
+module IntUtils =
+    Utils
         ( struct type t = int
             let to_string : (t -> string) = string_of_int
             let to_int : (t -> int) = fun x -> x end
         )
 
-module FloatUtils = Utils
+module FloatUtils =
+    Utils
         ( struct type t = float
             let to_string : (t -> string) = string_of_float
             let to_int : (t -> int) = int_of_float end
