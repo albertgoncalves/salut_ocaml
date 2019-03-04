@@ -14,21 +14,24 @@ module Ops (M : Monoid) = struct
     let to_string : ('a -> string) = M.to_string
 end
 
-module I = Ops
+module I =
+    Ops
         ( struct type t = int
             let append = (+)
             let empty = 0
             let to_string = string_of_int end
         )
 
-module F = Ops
+module F =
+    Ops
         ( struct type t = float
             let append = (+.)
             let empty = 0.0
             let to_string = string_of_float end
         )
 
-module S = Ops
+module S =
+    Ops
         ( struct type t = string
             let append = (^)
             let empty = ""
