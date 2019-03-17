@@ -28,7 +28,7 @@ let center (chord : chord) : chord =
     ; fifth = mod12 chord.fifth
     }
 
-let chord_to_string (chord : chord) : string option =
+let tonality (chord : chord) : string option =
     let third = chord.third - chord.first |> mod12 in
     let fifth = chord.fifth - chord.first |> mod12 in
     match (third, fifth) with
@@ -47,7 +47,7 @@ let int_to_move : (int -> string option) = function
 let move (chord : chord) : (string option -> chord) = function
     | Some "P" ->
         begin
-            match chord_to_string chord with
+            match tonality chord with
                 | Some "major" ->
                     { first = chord.first
                     ; third = chord.third - 1
@@ -62,7 +62,7 @@ let move (chord : chord) : (string option -> chord) = function
         end
     | Some "R" ->
         begin
-            match chord_to_string chord with
+            match tonality chord with
                 | Some "major" ->
                     { first = chord.fifth + 2
                     ; third = chord.first
@@ -77,7 +77,7 @@ let move (chord : chord) : (string option -> chord) = function
         end
     | Some "L" ->
         begin
-            match chord_to_string chord with
+            match tonality chord with
                 | Some "major" ->
                     { first = chord.third
                     ; third = chord.fifth
@@ -112,12 +112,10 @@ let chord_to_string (chord : chord) : string =
         chord.first
         |> mod12
         |> note_to_string in
-    let harmony =
-        chord
-        |> chord_to_string in
-    match (note, harmony) with
-        | (Some note, Some harmony) ->
-            P.sprintf "%s %s" note harmony
+    let tonality = tonality chord in
+    match (note, tonality) with
+        | (Some note, Some tonality) ->
+            P.sprintf "%s %s" note tonality
         | _ ->
             P.sprintf "%d %d %d"
                 chord.first
