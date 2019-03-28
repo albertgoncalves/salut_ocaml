@@ -16,8 +16,9 @@ with pkgs; mkShell {
         rlwrap
         tmux
         clang
-        python36Packages.csvkit
-    ];
+    ] ++ (with python36Packages; [
+        (csvkit.overridePythonAttrs (oldAttrs: {checkPhase = "true";}))
+    ]);
     shellHook = ''
         alias rocaml="rlwrap ocaml"
         echo $PATH > .nix_path
