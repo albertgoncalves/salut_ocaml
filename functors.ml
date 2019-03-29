@@ -44,16 +44,16 @@ module MonadPlus(M : Monad) : (Monad' with type 'a m := 'a M.m) = struct
     let (>>=) m f = M.bind f m
     let (=<<) f m = M.bind f m
     let join m = m >>= fun m' -> m'
-    let sequence mas =
+    let sequence ms =
         List.fold_left
             begin
-                fun ms m ->
-                    ms >>= fun ms' ->
+                fun ms' m ->
+                    ms' >>= fun ms'' ->
                     m >>= fun m' ->
-                    pure (m'::ms')
+                    pure (m'::ms'')
             end
             (pure [])
-            mas
+            ms
     let (>=>) f g = fun m -> f m >>= g
     let (<=<) g f = fun m -> f m >>= g
     let ap f m =
