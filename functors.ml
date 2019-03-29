@@ -108,6 +108,7 @@ module OS = OptionShow
 let pipeline : (int -> string) =
     OM.(<=<) (fun x -> Some (x + 5)) (fun x -> Some (x * 3))
     |@ OF.map (fun x -> x + 3)
+    |@ OM.ap @@ Some (fun x -> x + 1)
     |@ OM.(=<<) (fun x -> Some (x + 5))
     |@ OS.show string_of_int
 
