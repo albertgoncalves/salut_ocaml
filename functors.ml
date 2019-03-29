@@ -17,6 +17,16 @@ module type Monad = sig
     val bind : ('a -> 'b m) -> 'a m -> 'b m
 end
 
+module type Functor = sig
+    type _ t
+    val map : ('a -> 'b) -> 'a t -> 'b t
+end
+
+module type Show = sig
+    type _ s
+    val show : ('a -> string) -> 'a s -> string
+end
+
 module type Monad' = sig
     type _ m
     include Monad with type 'a m := 'a m
@@ -26,38 +36,54 @@ module type Monad' = sig
     val sequence : 'a m list -> 'a list m
     val (>=>) : ('a -> 'b m) -> ('b -> 'c m) -> ('a -> 'c m)
     val (<=<) : ('b -> 'c m) -> ('a -> 'b m) -> ('a -> 'c m)
+    val ap : ('a -> 'b) m -> 'a m -> 'b m
 end
 
 module MonadPlus(M : Monad) : (Monad' with type 'a m := 'a M.m) = struct
     include M
     let (>>=) m f = M.bind f m
     let (=<<) f m = M.bind f m
-    let join maa = maa >>= fun ma -> ma
+    let join m = m >>= fun m' -> m'
     let sequence mas =
         List.fold_left
             begin
-                fun xs x ->
-                    xs >>= fun xs' ->
-                    x >>= fun x' ->
-                    pure (x'::xs')
+                fun ms m ->
+                    ms >>= fun ms' ->
+                    m >>= fun m' ->
+                    pure (m'::ms')
             end
             (pure [])
             mas
-    let (>=>) f g = fun x -> f x >>= g
-    let (<=<) g f = fun x -> f x >>= g
+    let (>=>) f g = fun m -> f m >>= g
+    let (<=<) g f = fun m -> f m >>= g
+    let ap f m =
+        f >>= fun f' ->
+        m >>= fun m' -> pure (f' m')
+end
+
+module FunctorFromMonad(M : Monad) : (Functor with type 'a t = 'a M.m) = struct
+    type 'a t = 'a M.m
+    let map f x = M.bind (fun x' -> M.pure (f x')) x
 end
 
 module OptionMonad : (Monad with type 'a m = 'a option) = struct
     type 'a m = 'a option
-    let pure a = Some a
+    let pure m = Some m
     let bind f = function
         | None -> None
-        | Some a -> f a
+        | Some m -> f m
+end
+
+module OptionShow : (Show with type 'a s = 'a option) = struct
+    type 'a s = 'a option
+    let show f = function
+        | Some x -> P.sprintf "Some %s" (f x)
+        | None -> "None"
 end
 
 module ListMonad : (Monad with type 'a m = 'a list) = struct
     type 'a m = 'a list
-    let pure a = [a]
+    let pure x = [x]
     let bind f =
         let rec loop accu = function
             | [] -> accu
@@ -67,28 +93,6 @@ module ListMonad : (Monad with type 'a m = 'a list) = struct
         function
             | [] -> []
             | xs -> loop [] (L.rev xs)
-end
-
-module type Functor = sig
-    type _ t
-    val map : ('a -> 'b) -> 'a t -> 'b t
-end
-
-module FunctorFromMonad(M : Monad) : (Functor with type 'a t = 'a M.m) = struct
-    type 'a t = 'a M.m
-    let map f ma = M.bind (fun a -> M.pure (f a)) ma
-end
-
-module type Show = sig
-    type _ s
-    val show : ('a -> string) -> 'a s -> string
-end
-
-module OptionShow : (Show with type 'a s = 'a option) = struct
-    type 'a s = 'a option
-    let show f = function
-        | Some x -> P.sprintf "Some %s" (f x)
-        | None -> "None"
 end
 
 module ListShow : (Show with type 'a s = 'a list) = struct
