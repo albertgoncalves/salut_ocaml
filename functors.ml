@@ -105,16 +105,20 @@ module OF = FunctorFromMonad(OptionMonad)
 module OM = MonadPlus(OptionMonad)
 module OS = OptionShow
 
-let pipeline : (int -> string) =
-    OM.(<=<) (fun x -> Some (x + 5)) (fun x -> Some (x * 3))
-    |@ OF.map (fun x -> x + 3)
-    |@ OM.ap @@ Some (fun x -> x + 1)
-    |@ OM.(=<<) (fun x -> Some (x + 5))
-    |@ OS.show string_of_int
+let pipeline : (int -> int option) =
+    let f = (+) in
+    let a x = Some (fun y -> x * y) in
+    let m (x : int) : (int -> int option) = function
+        | 0 -> None
+        | y -> Some (x / y) in
+    OM.(<=<) (fun x -> Some (x + 100)) (m 100)
+    |@ OF.map (f 1)
+    |@ OM.ap (a 1)
+    |@ OM.(=<<) (m 10000)
 
 let main () : unit =
-    [3; 50; 0]
-    |> L.map pipeline
+    [1; 500; 0]
+    |> L.map (OS.show string_of_int |. pipeline)
     |> LS.show id
     |> print_endline
 
