@@ -18,8 +18,8 @@ module type Monad = sig
 end
 
 module type Functor = sig
-    type _ t
-    val map : ('a -> 'b) -> 'a t -> 'b t
+    type _ f
+    val map : ('a -> 'b) -> 'a f -> 'b f
 end
 
 module type Show = sig
@@ -30,8 +30,8 @@ end
 module type Monad' = sig
     type _ m
     include Monad with type 'a m := 'a m
-    val (>>=) : 'a m -> ('a -> 'b m) -> 'b m
     val (=<<) : ('a -> 'b m) -> 'a m -> 'b m
+    val (>>=) : 'a m -> ('a -> 'b m) -> 'b m
     val join : 'a m m -> 'a m
     val sequence : 'a m list -> 'a list m
     val (>=>) : ('a -> 'b m) -> ('b -> 'c m) -> ('a -> 'c m)
@@ -41,11 +41,11 @@ end
 
 module MonadPlus(M : Monad) : (Monad' with type 'a m := 'a M.m) = struct
     include M
+    let (=<<) = M.bind
     let (>>=) m f = M.bind f m
-    let (=<<) f m = M.bind f m
     let join m = m >>= fun m' -> m'
     let sequence ms =
-        List.fold_left
+        L.fold_left
             begin
                 fun ms' m ->
                     ms' >>= fun ms'' ->
@@ -61,8 +61,8 @@ module MonadPlus(M : Monad) : (Monad' with type 'a m := 'a M.m) = struct
         m >>= fun m' -> pure (f' m')
 end
 
-module FunctorFromMonad(M : Monad) : (Functor with type 'a t = 'a M.m) = struct
-    type 'a t = 'a M.m
+module FunctorFromMonad(M : Monad) : (Functor with type 'a f = 'a M.m) = struct
+    type 'a f = 'a M.m
     let map f x = M.bind (fun x' -> M.pure (f x')) x
 end
 
