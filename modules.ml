@@ -14,8 +14,10 @@ module F (X : T) = struct
             X.init (b - a) (fun i -> i + a)
         else
             X.init (a - b) (fun i -> a - i)
-    let print (xs : int t) : unit =
-        X.iter (print_endline |. string_of_int) xs
+    let print (f : (int -> string)) (xs : int t) : unit =
+        let a () = X.iter (print_string |. f) xs in
+        let b () = print_string "\n" in
+        a >> b
 end
 
 module A = struct
@@ -37,8 +39,8 @@ module L = struct
 end
 
 let main () =
-    let l () = L.print (L.range 0 10) in
-    let a () = A.print (A.range 10 0) in
+    let l () = L.print string_of_int (L.range 0 10) in
+    let a () = A.print string_of_int (A.range 9 (-1)) in
     l >> a
 
 let () = main ()
