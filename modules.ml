@@ -21,8 +21,7 @@ end
 module A = struct
     include Array
     include
-        F ( struct
-            type 'a t = 'a array
+        F ( struct type 'a t = 'a array
             let init = Array.init
             let iter = Array.iter end
         )
@@ -31,8 +30,7 @@ end
 module L = struct
     include List
     include
-        F ( struct
-            type 'a t = 'a list
+        F ( struct type 'a t = 'a list
             let init = List.init
             let iter = List.iter end
         )
