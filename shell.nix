@@ -16,7 +16,7 @@ with pkgs; mkShell {
         rlwrap
         tmux
         clang
-    ] ++ (with python36Packages; [
+    ] ++ (with python37Packages; [
         (csvkit.overridePythonAttrs (oldAttrs: {checkPhase = "true";}))
     ]);
     shellHook = ''
