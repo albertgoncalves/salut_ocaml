@@ -14,7 +14,7 @@ module F (X : T) = struct
             X.init (b - a) (fun i -> i + a)
         else
             X.init (a - b) (fun i -> a - i)
-    let print (f : (int -> string)) (xs : int t) : unit =
+    let print (f : ('a -> string)) (xs : 'a t) : unit =
         let a () = X.iter (print_string |. f) xs in
         let b () = print_string "\n" in
         a >> b
