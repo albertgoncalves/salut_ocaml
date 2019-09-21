@@ -24,8 +24,8 @@ with pkgs; mkShell {
         echo $PATH > .nix_path
 
         if [ $(uname -s) = "Darwin" ]; then
-            alias ls='ls --color=auto'
-            alias ll='ls -al'
+            alias ls="ls --color=auto"
+            alias ll="ls -al"
         fi
     '';
 }
